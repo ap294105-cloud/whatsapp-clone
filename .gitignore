@@ -1,0 +1,18 @@
+# Node dependency folder
+node_modules/
+package-lock.json
+
+# Local JSON database files
+data/*.json
+
+# Sensitive configuration settings containing credentials
+.env
+
+# Android gradle builds & build files
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+
+# Log files
+*.log
