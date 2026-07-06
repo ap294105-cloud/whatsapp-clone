@@ -6,6 +6,12 @@ const path = require("path");
 const fs = require("fs");
 const twilio = require("twilio");
 
+// Initialize Twilio client conditionally if credentials exist
+let twilioClient = null;
+if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+  twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+}
+
 // Security dependencies
 const helmet = require("helmet");
 const cors = require("cors");
@@ -37,6 +43,9 @@ const CALLS_FILE = path.join(DATA_DIR, "calls.json");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const GROUPS_FILE = path.join(DATA_DIR, "groups.json");
 const KEYS_FILE = path.join(DATA_DIR, "keys.json");
+
+// Active OTP records map (phoneNumber -> {code, expiry})
+let activeOTPs = {};
 
 // Bot Profiles Data
 const BOTS = [
@@ -299,7 +308,8 @@ app.post("/api/send-otp", async (req, res) => {
       res.json({ success: true });
     } catch (err) {
       console.error(`[SMS Error] Failed to dispatch SMS via Twilio to ${phoneNumber}:`, err);
-      res.status(500).json({ success: false, error: "Failed to dispatch verification SMS via Twilio." });
+      console.warn(`\n----------------------------------------\n[DEMO CODE NOTICE] Twilio dispatch failed!\nOTP verification code generated for ${phoneNumber}: ${code}\n----------------------------------------\n`);
+      res.status(500).json({ success: false, error: "Twilio dispatch failed. Code was printed to server terminal." });
     }
   } else {
     // Print to terminal for local simulation in case Twilio is not yet configured

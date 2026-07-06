@@ -1017,7 +1017,7 @@ function bindDOMEvents() {
             showToast("Simulated OTP sent. Please check server terminal logs!");
           } else {
             showToast(data.error || "SMS failed.");
-            if (data.error && data.error.includes("not configured")) {
+            if (data.error && (data.error.includes("not configured") || data.error.includes("printed to server terminal") || data.error.includes("dispatch failed"))) {
               document.getElementById("login-step-phone").style.display = "none";
               document.getElementById("login-step-otp").style.display = "flex";
               document.getElementById("login-phone-display").textContent = fullPhoneNumber;
