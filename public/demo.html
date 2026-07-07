@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp E2EE Clone - Live Demo & Product Showcase</title>
+  
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0b141a;
+      --bg-card: rgba(34, 46, 53, 0.4);
+      --wa-green: #00a884;
+      --wa-green-glow: rgba(0, 168, 132, 0.35);
+      --wa-green-hover: #00c49a;
+      --text-primary: #e9edef;
+      --text-secondary: #8696a0;
+      --border-color: rgba(134, 150, 160, 0.15);
+      --accent-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Ambient Background Glows */
+    .glow-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .glow-1 {
+      top: -10%;
+      left: 10%;
+      width: 400px;
+      height: 400px;
+      background: #00a884;
+    }
+
+    .glow-2 {
+      bottom: 20%;
+      right: 5%;
+      width: 500px;
+      height: 500px;
+      background: #11998e;
+    }
+
+    /* Header Nav */
+    header {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px var(--wa-green-glow);
+    }
+
+    .logo-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(120deg, #ffffff, var(--wa-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Main Container */
+    main {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 0;
+      gap: 24px;
+    }
+
+    .badge {
+      background: rgba(0, 168, 132, 0.1);
+      border: 1px solid rgba(0, 168, 132, 0.3);
+      padding: 8px 16px;
+      border-radius: 30px;
+      color: var(--wa-green);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 900px;
+    }
+
+    .hero h1 span {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: clamp(16px, 2vw, 19px);
+      max-width: 650px;
+      margin-bottom: 12px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .btn {
+      padding: 16px 36px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 20px var(--wa-green-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--wa-green-glow);
+      background: linear-gradient(135deg, #13b3a6 0%, #46f788 100%);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Cards Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 80px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 168, 132, 0.4);
+      box-shadow: 0 12px 40px rgba(0, 168, 132, 0.1);
+    }
+
+    .icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(0, 168, 132, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--wa-green);
+    }
+
+    .icon-wrapper svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Live Status Board */
+    .status-board {
+      margin-top: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--wa-green);
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: var(--wa-green);
+      border-radius: 50%;
+      animation: ripple 1.5s infinite ease-in-out;
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Animations */
+    @keyframes ripple {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(3.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 40px 0;
+      }
+      .cta-group {
+        width: 100%;
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glow Background Spheres -->
+  <div class="glow-sphere glow-1"></div>
+  <div class="glow-sphere glow-2"></div>
+
+  <!-- Header Nav -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12.011 2c-5.502 0-9.989 4.478-9.989 9.978 0 1.76.459 3.479 1.33 4.996L2 22l5.191-1.361c1.468.8 3.111 1.22 4.809 1.22 5.502 0 10-4.478 10-9.978S17.513 2 12.011 2zm6.275 13.99c-.279.791-1.636 1.44-2.28 1.492-.593.049-1.22-.178-3.811-1.248-3.315-1.369-5.46-4.739-5.626-4.96-.165-.22-1.332-1.77-1.332-3.38 0-1.61.841-2.4 1.141-2.71.299-.31.659-.39.88-.39s.44.02.63.03c.2.01.47-.07.73.57.269.64.919 2.24.999 2.4.08.16.13.35.02.56-.11.21-.17.34-.34.54-.17.2-.36.45-.51.6-.17.17-.35.35-.15.69.2.34.89 1.462 1.91 2.373 1.309 1.171 2.409 1.532 2.749 1.7.34.17.54.14.74-.09.2-.23.86-.99.1.09-1.07.13-1.47.74-2.11 1.36.03.04.06.08.1.12.339.34.79.84.88 1.01.09.17.04.32-.01.42s-.52 1.22-.52 1.22z"/></svg>
+      </div>
+      <span class="brand-name">WhatsApp E2EE</span>
+    </div>
+    <div>
+      <a href="https://github.com/ap294105-cloud/whatsapp-clone" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px;">View on GitHub</a>
+    </div>
+  </header>
+
+  <!-- Main Showcase Container -->
+  <main>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="badge">
+        <span class="pulse-dot"></span>
+        Enterprise Production Ready
+      </div>
+      <h1>Secure End-to-End Encrypted <span>WhatsApp Web Clone</span></h1>
+      <p>Experience ultra-private instant messaging. Fortified with 35 hardened security layers, browser-based cryptography, and offline outbox queuing.</p>
+      
+      <div class="cta-group">
+        <a href="/" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right:2px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Launch Web Client
+        </a>
+        <a href="/app-debug.apk" download class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+          Download Android APK
+        </a>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-grid">
+      
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </div>
+        <h3>Client-Side Cryptography (E2EE)</h3>
+        <p>Private keys are stored encrypted on your device using passcode-derived XOR encoding. Text messages and media attachments are fully encrypted before transmitting, ensuring zero-knowledge message delivery.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l7.59-7.59L19 7l-9 9z"/></svg>
+        </div>
+        <h3>35 Layers of Hardening</h3>
+        <p>Fortified against exploits with custom Helmet Content Security Policies (CSP), CORS locks, parameter pollution checks, query/socket rate-limiters, DOM sanitizers, frame-busting clickjacking protection, and XSS filtering.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+        </div>
+        <h3>Native Android WebView App</h3>
+        <p>A native Gradle-compiled Android application wrapper. Incorporates network configurations supporting dynamic local server connections and leverages offline-cached files to run in hybrid app environments.</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/></svg>
+        </div>
+        <h3>Resilient Offline Queueing</h3>
+        <p>If network connection drops, messages and document files are queued in a local outbox. An animated offline banner notifies user status, flushing outbox queues instantly when socket reconnects.</p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3>Advanced Status Stories</h3>
+        <p>Publish textual status updates with preselected background gradients, or share image statuses complete with captions. Features automatic 24-hour story expiration and reply handlers.</p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="feature-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <h3>Privacy Control Center</h3>
+        <p>Manage visibility settings globally for Last Seen timestamps, Online presence indicators, Profile photos, and bios with Everyone / My Contacts / Nobody filters, plus read receipts.</p>
+      </div>
+
+    </section>
+
+    <!-- Connection Status Check -->
+    <section class="status-board">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="pulse-dot"></span>
+        <span style="font-weight:600; color:var(--wa-green); text-transform:uppercase; letter-spacing:1px; font-size:14px;">Demo Server Online</span>
+      </div>
+      <p style="color:var(--text-secondary); max-width: 500px; font-size: 15px;">WebSocket server is running. Web clients and Android APK instances will automatically bind to database services.</p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 WhatsApp E2EE Clone Project. Built with clean CSS and Secure Node.js.</p>
+  </footer>
+
+</body>
+</html>
