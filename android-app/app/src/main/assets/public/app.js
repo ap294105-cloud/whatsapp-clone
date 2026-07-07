@@ -44,8 +44,9 @@ function decryptJwk(cipherTextBase64, secretKey) {
   }
 }
 
-// Establish WebSocket Connection with dynamic fallback for local Android WebView (Emulator loops to port 3000 of host)
-const socketUrl = window.location.protocol === "file:" ? "http://10.0.2.2:3000" : "";
+// Establish WebSocket Connection with dynamic fallback
+const savedBackendUrl = localStorage.getItem("wa_clone_backend_url");
+const socketUrl = savedBackendUrl || (window.location.protocol === "file:" ? "http://10.0.2.2:3000" : "");
 const socket = io(socketUrl);
 
 // WebRTC Media & Cryptographic Key variables
@@ -1316,6 +1317,20 @@ function bindDOMEvents() {
     if (confirm("Log out from this active session?")) {
       logoutSession();
     }
+  });
+
+  // Connection Settings: Server URL initialization & listener
+  const serverUrlInput = document.getElementById("settings-server-url-input");
+  serverUrlInput.value = localStorage.getItem("wa_clone_backend_url") || "";
+  serverUrlInput.addEventListener("change", (e) => {
+    const val = e.target.value.trim();
+    if (val) {
+      localStorage.setItem("wa_clone_backend_url", val);
+    } else {
+      localStorage.removeItem("wa_clone_backend_url");
+    }
+    showToast("Server URL updated! Reconnecting...");
+    setTimeout(() => window.location.reload(), 1200);
   });
 
   // Contact list search filters

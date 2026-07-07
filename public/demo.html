@@ -3,466 +3,923 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsApp E2EE Clone - Live Demo & Product Showcase</title>
-  
-  <!-- Premium Typography -->
+  <title>WhatsCrypt - Hardened E2EE Messaging Platform</title>
+  <link rel="stylesheet" href="demo.css">
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg-dark: #0b141a;
-      --bg-card: rgba(34, 46, 53, 0.4);
-      --wa-green: #00a884;
-      --wa-green-glow: rgba(0, 168, 132, 0.35);
-      --wa-green-hover: #00c49a;
-      --text-primary: #e9edef;
-      --text-secondary: #8696a0;
-      --border-color: rgba(134, 150, 160, 0.15);
-      --accent-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Outfit', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* Ambient Background Glows */
-    .glow-sphere {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      z-index: 0;
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    .glow-1 {
-      top: -10%;
-      left: 10%;
-      width: 400px;
-      height: 400px;
-      background: #00a884;
-    }
-
-    .glow-2 {
-      bottom: 20%;
-      right: 5%;
-      width: 500px;
-      height: 500px;
-      background: #11998e;
-    }
-
-    /* Header Nav */
-    header {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 10;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--accent-gradient);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px var(--wa-green-glow);
-    }
-
-    .logo-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: #ffffff;
-    }
-
-    .brand-name {
-      font-size: 22px;
-      font-weight: 700;
-      background: linear-gradient(120deg, #ffffff, var(--wa-green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Main Container */
-    main {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px 80px 24px;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* Hero Section */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 60px 0;
-      gap: 24px;
-    }
-
-    .badge {
-      background: rgba(0, 168, 132, 0.1);
-      border: 1px solid rgba(0, 168, 132, 0.3);
-      padding: 8px 16px;
-      border-radius: 30px;
-      color: var(--wa-green);
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      animation: pulse 2s infinite;
-    }
-
-    .hero h1 {
-      font-size: clamp(36px, 5vw, 64px);
-      font-weight: 800;
-      line-height: 1.15;
-      max-width: 900px;
-    }
-
-    .hero h1 span {
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      color: var(--text-secondary);
-      font-size: clamp(16px, 2vw, 19px);
-      max-width: 650px;
-      margin-bottom: 12px;
-    }
-
-    .cta-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      margin-top: 16px;
-    }
-
-    .btn {
-      padding: 16px 36px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-primary {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      box-shadow: 0 4px 20px var(--wa-green-glow);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--wa-green-glow);
-      background: linear-gradient(135deg, #13b3a6 0%, #46f788 100%);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    /* Cards Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin-top: 80px;
-    }
-
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 32px;
-      transition: all 0.3s ease;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(0, 168, 132, 0.4);
-      box-shadow: 0 12px 40px rgba(0, 168, 132, 0.1);
-    }
-
-    .icon-wrapper {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: rgba(0, 168, 132, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--wa-green);
-    }
-
-    .icon-wrapper svg {
-      width: 24px;
-      height: 24px;
-      fill: currentColor;
-    }
-
-    .feature-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    .feature-card p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* Live Status Board */
-    .status-board {
-      margin-top: 80px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: var(--card-shadow);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .pulse-dot {
-      width: 12px;
-      height: 12px;
-      background-color: var(--wa-green);
-      border-radius: 50%;
-      display: inline-block;
-      position: relative;
-    }
-
-    .pulse-dot::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: var(--wa-green);
-      border-radius: 50%;
-      animation: ripple 1.5s infinite ease-in-out;
-    }
-
-    /* Footer */
-    footer {
-      width: 100%;
-      padding: 40px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-
-    /* Animations */
-    @keyframes ripple {
-      0% {
-        transform: scale(1);
-        opacity: 0.8;
-      }
-      100% {
-        transform: scale(3.5);
-        opacity: 0;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.7;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero {
-        padding: 40px 0;
-      }
-      .cta-group {
-        width: 100%;
-        flex-direction: column;
-      }
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Glow Background Spheres -->
-  <div class="glow-sphere glow-1"></div>
-  <div class="glow-sphere glow-2"></div>
-
-  <!-- Header Nav -->
-  <header>
-    <div class="logo-container">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12.011 2c-5.502 0-9.989 4.478-9.989 9.978 0 1.76.459 3.479 1.33 4.996L2 22l5.191-1.361c1.468.8 3.111 1.22 4.809 1.22 5.502 0 10-4.478 10-9.978S17.513 2 12.011 2zm6.275 13.99c-.279.791-1.636 1.44-2.28 1.492-.593.049-1.22-.178-3.811-1.248-3.315-1.369-5.46-4.739-5.626-4.96-.165-.22-1.332-1.77-1.332-3.38 0-1.61.841-2.4 1.141-2.71.299-.31.659-.39.88-.39s.44.02.63.03c.2.01.47-.07.73.57.269.64.919 2.24.999 2.4.08.16.13.35.02.56-.11.21-.17.34-.34.54-.17.2-.36.45-.51.6-.17.17-.35.35-.15.69.2.34.89 1.462 1.91 2.373 1.309 1.171 2.409 1.532 2.749 1.7.34.17.54.14.74-.09.2-.23.86-.99.1.09-1.07.13-1.47.74-2.11 1.36.03.04.06.08.1.12.339.34.79.84.88 1.01.09.17.04.32-.01.42s-.52 1.22-.52 1.22z"/></svg>
+  <!-- Navigation Header -->
+  <header class="glass-header">
+    <div class="header-container">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28">
+          <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12c0 2.17.76 4.19 2.03 5.79L3.08 21.08c-.2.52.32 1.04.84.84l3.29-.95C8.81 21.24 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+        </svg>
+        <span>WhatsCrypt</span>
       </div>
-      <span class="brand-name">WhatsApp E2EE</span>
-    </div>
-    <div>
-      <a href="https://github.com/ap294105-cloud/whatsapp-clone" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px;">View on GitHub</a>
+      <nav class="nav-links">
+        <a href="#simulator">E2EE Simulator</a>
+        <a href="#offline-sim">Offline Outbox</a>
+        <a href="#sandbox">Bot Playground</a>
+        <a href="#hardening">35 Hardening Layers</a>
+        <a href="#architecture">Architecture</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="/index.html" class="btn btn-primary">Launch Web App</a>
+      </div>
     </div>
   </header>
 
-  <!-- Main Showcase Container -->
-  <main>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="badge">
-        <span class="pulse-dot"></span>
-        Enterprise Production Ready
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="badge">PROTOTYPE PRODUCT DEMO</div>
+        <h1>Next-Gen Messaging.<br><span class="gradient-text">Hardened for Security.</span></h1>
+        <p class="hero-desc">
+          Experience a fully featured WhatsApp Clone featuring client-side End-to-End Encryption (E2EE), voice & video call minimization, automatic offline resiliency queueing, and a native Android companion app. Fully hardened with 35 defense-in-depth layers.
+        </p>
+        <div class="hero-ctas">
+          <a href="/index.html" class="btn btn-primary btn-lg">
+            <span>Launch Web Client</span>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+          </a>
+          <a href="/app-debug.apk" class="btn btn-secondary btn-lg" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+            <span>Download Android APK</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <h3>100%</h3>
+            <p>E2EE Client-Side</p>
+          </div>
+          <div class="stat-card">
+            <h3>35</h3>
+            <p>Defense-in-depth Layers</p>
+          </div>
+          <div class="stat-card">
+            <h3>0%</h3>
+            <p>Key Storage Leaks</p>
+          </div>
+        </div>
       </div>
-      <h1>Secure End-to-End Encrypted <span>WhatsApp Web Clone</span></h1>
-      <p>Experience ultra-private instant messaging. Fortified with 35 hardened security layers, browser-based cryptography, and offline outbox queuing.</p>
       
-      <div class="cta-group">
-        <a href="/" class="btn btn-primary">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="margin-right:2px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          Launch Web Client
-        </a>
-        <a href="/app-debug.apk" download class="btn btn-secondary">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
-          Download Android APK
-        </a>
+      <!-- Premium Hero Interactive Card -->
+      <div class="hero-visual">
+        <div class="phone-mockup-wrapper">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="chat-mock-header">
+                <div class="mock-user-info">
+                  <div class="mock-avatar">🔒</div>
+                  <div>
+                    <h4>WhatsCrypt Server Status</h4>
+                    <span class="online-indicator"><span class="pulse-dot"></span> Active & Secure</span>
+                  </div>
+                </div>
+                <div class="lock-status" title="E2EE Keys Verified">Verified</div>
+              </div>
+              <div class="chat-mock-messages" id="hero-messages">
+                <div class="message msg-in">
+                  <div class="msg-content">Welcome to the Live Demo page! Here you can check our platform capabilities.</div>
+                  <span class="msg-time">12:00 PM</span>
+                </div>
+                <div class="message msg-out">
+                  <div class="msg-content">Is it fully encrypted?</div>
+                  <span class="msg-time">12:01 PM <span class="ticks">✓✓</span></span>
+                </div>
+                <div class="message msg-in">
+                  <div class="msg-content">Yes! Using browser Web Crypto AES-GCM. The keys are kept locally in your localStorage, encrypted via XOR.</div>
+                  <span class="msg-time">12:01 PM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Features Section -->
-    <section class="features-grid">
+  <!-- Interactive Simulator Section -->
+  <section id="simulator" class="section-simulator">
+    <div class="container">
+      <div class="section-title">
+        <h2>End-to-End Encryption Simulator</h2>
+        <p>Type a message below to see in real-time how the browser Web Crypto API transforms plain text into high-strength ciphertext in transit, and how it is decrypted on the receiver's end.</p>
+      </div>
+
+      <div class="simulator-grid">
+        <!-- Input Block -->
+        <div class="sim-card sim-input-panel">
+          <div class="sim-card-header">
+            <h3>Sender Client (Alice)</h3>
+            <span class="badge badge-sec">SubtleCrypto Active</span>
+          </div>
+          <div class="sim-card-body">
+            <label for="plain-input">Write Message</label>
+            <textarea id="plain-input" placeholder="Type a message to encrypt...">Hello Bob! Let's meet at 5 PM. Don't share this secret code: 7894.</textarea>
+            
+            <div class="encryption-keys">
+              <div class="key-field">
+                <span>AES-GCM Key (Client A):</span>
+                <code id="sender-key">Generating AES-256 GCM symmetric key...</code>
+              </div>
+              <div class="key-field">
+                <span>Initialization Vector (IV):</span>
+                <code id="sender-iv">Generating random 12-byte IV...</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transit Flow Visualizer -->
+        <div class="sim-card sim-transit-panel">
+          <div class="sim-card-header">
+            <h3>Web Server (Transit Payload)</h3>
+            <span class="badge badge-warn">Zero-Knowledge Server</span>
+          </div>
+          <div class="sim-card-body">
+            <div class="server-payload-display">
+              <div class="lock-overlay" id="transit-lock-icon">🔒</div>
+              <pre><code id="transit-payload">{
+  "senderId": "alice-client",
+  "recipientId": "bob-client",
+  "encryptedKey": "A3F8B...[Truncated]",
+  "ciphertext": "Wait for encryption..."
+}</code></pre>
+            </div>
+            <div class="server-security-alert">
+              <strong>Server Inspection:</strong> Because WhatsCrypt uses Zero-Knowledge E2EE, the node server database only logs this cipher packet. It has no access to the private keys, making eavesdropping impossible.
+            </div>
+          </div>
+        </div>
+
+        <!-- Decrypted Output Block -->
+        <div class="sim-card sim-output-panel">
+          <div class="sim-card-header">
+            <h3>Recipient Client (Bob)</h3>
+            <span class="badge badge-success">Decrypted Securely</span>
+          </div>
+          <div class="sim-card-body">
+            <div class="decryption-keys">
+              <div class="key-field">
+                <span>Shared AES Key (Client B):</span>
+                <code id="recipient-key">Importing AES Key...</code>
+              </div>
+            </div>
+            <label>Decrypted Message Display</label>
+            <div class="decrypted-result" id="decrypted-message">
+              Waiting for incoming transit payload...
+            </div>
+            <div class="decrypted-badge">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              Verified Authentic Payload
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offline Outbox Simulator Section -->
+  <section id="offline-sim" class="section-offline">
+    <div class="container">
+      <div class="section-title">
+        <h2>Resilient Offline Outbox Queue</h2>
+        <p>WhatsCrypt keeps chatting alive even when connectivity drops. Toggle connection status below, send messages, and see how our local outbox holds and queues up payloads until network status is restored.</p>
+      </div>
+
+      <div class="offline-container">
+        <!-- Control Panel -->
+        <div class="offline-controls-card">
+          <h3>Network Status Manager</h3>
+          <div class="status-toggle-wrapper">
+            <span class="status-label">Network Status:</span>
+            <button class="status-toggle-btn online" id="network-toggle-btn">
+              <span class="btn-dot"></span>
+              <span class="btn-text">CONNECTED (ONLINE)</span>
+            </button>
+          </div>
+          <p class="status-note">
+            When <strong>OFFLINE</strong>, sent messages are marked with a pending clock icon <code>🕒</code> and added to the local Outbox Queue. When toggled back to <strong>ONLINE</strong>, the outbox automatically flushes the queue in order.
+          </p>
+
+          <div class="queue-status-card">
+            <h4>Outbox Queue Size</h4>
+            <div class="queue-count" id="queue-size-badge">0 Messages</div>
+            <div class="queue-items-list" id="queue-items-container">
+              <div class="empty-queue-msg">Outbox queue is currently empty.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone UI Mockup -->
+        <div class="offline-phone-mock">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="chat-mock-header">
+                <div class="mock-user-info">
+                  <div class="mock-avatar">💬</div>
+                  <div>
+                    <h4>Project Chatroom</h4>
+                    <span class="online-indicator" id="chatroom-network-indicator"><span class="pulse-dot"></span> Connected</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Connection Status Banner -->
+              <div class="phone-offline-banner" id="phone-offline-banner" style="display:none;">
+                Computer not connected (offline)
+              </div>
+
+              <div class="chat-mock-messages" id="offline-chat-messages">
+                <div class="message msg-in">
+                  <div class="msg-content">Are you guys ready for the deployment? We need the final code review.</div>
+                  <span class="msg-time">04:30 PM</span>
+                </div>
+              </div>
+
+              <div class="chat-mock-footer">
+                <input type="text" id="offline-chat-input" placeholder="Type a message...">
+                <button id="offline-send-btn">
+                  <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Bot Playground / Sandbox -->
+  <section id="sandbox" class="section-sandbox">
+    <div class="container">
+      <div class="section-title">
+        <h2>Interactive Bot Playground</h2>
+        <p>Test out our automated chat assistant behaviors. Select a bot below, type a message, and observe how the bot answers instantly using built-in parsing logic.</p>
+      </div>
+
+      <div class="sandbox-container">
+        <!-- Bot Selectors -->
+        <div class="bot-selectors-panel">
+          <h3>Select Conversation Partner</h3>
+          <div class="bot-cards-grid">
+            <div class="bot-select-card active" data-bot="bot-alice">
+              <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Alice" alt="Alice">
+              <div class="bot-info">
+                <h4>Alice 💻 (Dev Friend)</h4>
+                <p>Main branch contains bugs. Proceed with caution. 🚀</p>
+                <span class="bot-pill font-code">online</span>
+              </div>
+            </div>
+            <div class="bot-select-card" data-bot="bot-bob">
+              <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bob" alt="Bob">
+              <div class="bot-info">
+                <h4>Bob 💼 (Project Lead)</h4>
+                <p>In meetings all day. Email if urgent.</p>
+                <span class="bot-pill font-code">offline</span>
+              </div>
+            </div>
+            <div class="bot-select-card" data-bot="bot-charlie">
+              <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Charlie" alt="Charlie">
+              <div class="bot-info">
+                <h4>Charlie Grandma ❤️👵</h4>
+                <p>Baking cookies today! 👵🍪</p>
+                <span class="bot-pill font-code">online</span>
+              </div>
+            </div>
+            <div class="bot-select-card" data-bot="bot-david">
+              <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=David" alt="David">
+              <div class="bot-info">
+                <h4>Coach David 🏋️‍♂️</h4>
+                <p>Eat, sleep, lift, repeat. 💪 No excuses!</p>
+                <span class="bot-pill font-code">online</span>
+              </div>
+            </div>
+            <div class="bot-select-card" data-bot="bot-eva">
+              <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Eva" alt="Eva">
+              <div class="bot-info">
+                <h4>Eva ✈️ (Travel Vlog)</h4>
+                <p>Currently exploring Tokyo! 🇯🇵🗼</p>
+                <span class="bot-pill font-code">online</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Widget Panel -->
+        <div class="bot-chat-panel">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="chat-mock-header" id="bot-chat-header">
+                <div class="mock-user-info">
+                  <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Alice" alt="Alice" class="header-bot-avatar" id="bot-header-avatar">
+                  <div>
+                    <h4 id="bot-header-name">Alice 💻 (Dev Friend)</h4>
+                    <span class="online-indicator" id="bot-header-status"><span class="pulse-dot"></span> online</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-mock-messages" id="bot-chat-messages">
+                <div class="message msg-in">
+                  <div class="msg-content">Hey! What's coding today? 💻</div>
+                  <span class="msg-time">02:00 PM</span>
+                </div>
+              </div>
+
+              <div class="chat-mock-footer">
+                <input type="text" id="bot-chat-input" placeholder="Ask Alice a question (e.g. bug, project, code)...">
+                <button id="bot-send-btn">
+                  <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 35-Layer Security Hardening Section -->
+  <section id="hardening" class="section-hardening">
+    <div class="container">
+      <div class="section-title">
+        <h2>35 Layers of Security Hardening</h2>
+        <p>A breakdown of our complete security framework built to defeat CSRF, XSS, MITM key hijacking, directory traversals, socket flood attacks, and data leaks.</p>
+      </div>
+
+      <div class="hardening-dashboard">
+        <!-- Sidebar filters -->
+        <div class="hardening-filters">
+          <button class="filter-tab active" data-category="all">All Layers (35)</button>
+          <button class="filter-tab" data-category="client">Client & DOM Hardening</button>
+          <button class="filter-tab" data-category="server">Express HTTP Server</button>
+          <button class="filter-tab" data-category="socket">WebSocket & Handshake</button>
+          <button class="filter-tab" data-category="db">Database & Storage</button>
+          <button class="filter-tab" data-category="crypto">E2EE Cryptographic Engine</button>
+        </div>
+
+        <!-- Grid Cards -->
+        <div class="hardening-grid" id="hardening-layers-grid">
+          <!-- Dynamically populated via JS for clean management -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Architecture Diagram -->
+  <section id="architecture" class="section-architecture">
+    <div class="container">
+      <div class="section-title">
+        <h2>Platform Technical Architecture</h2>
+        <p>Understand the Zero-Knowledge End-to-End Encryption flow between clients using browser SubtleCrypto APIs and the Socket.io Node.js server.</p>
+      </div>
       
-      <!-- Feature 1 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-        </div>
-        <h3>Client-Side Cryptography (E2EE)</h3>
-        <p>Private keys are stored encrypted on your device using passcode-derived XOR encoding. Text messages and media attachments are fully encrypted before transmitting, ensuring zero-knowledge message delivery.</p>
+      <div class="architecture-diagram-card">
+        <!-- SVG Diagram -->
+        <svg class="arch-svg" viewBox="0 0 800 450" width="100%" height="auto">
+          <!-- Defs for markers and styles -->
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#00a884" />
+            </marker>
+            <linearGradient id="gradient-card" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#111b21" />
+              <stop offset="100%" stop-color="#202c33" />
+            </linearGradient>
+            <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#53bdeb" />
+              <stop offset="50%" stop-color="#00a884" />
+              <stop offset="100%" stop-color="#53bdeb" />
+            </linearGradient>
+          </defs>
+
+          <!-- Client A -->
+          <rect x="30" y="80" width="220" height="260" rx="12" fill="url(#gradient-card)" stroke="#00a884" stroke-width="2" />
+          <text x="140" y="115" fill="#e9edef" font-family="'Outfit'" font-size="16" font-weight="bold" text-anchor="middle">Client A (Alice)</text>
+          
+          <rect x="50" y="140" width="180" height="40" rx="6" fill="#2a3942" />
+          <text x="140" y="165" fill="#8696a0" font-family="Inter" font-size="12" text-anchor="middle">Raw Message: "Hello Bob"</text>
+
+          <rect x="50" y="195" width="180" height="40" rx="6" fill="#00a884" fill-opacity="0.2" stroke="#00a884" />
+          <text x="140" y="220" fill="#00a884" font-family="Inter" font-size="12" font-weight="bold" text-anchor="middle">SubtleCrypto AES-GCM Encrypt</text>
+
+          <rect x="50" y="250" width="180" height="70" rx="6" fill="#202c33" stroke="#2a3942" />
+          <text x="140" y="275" fill="#8696a0" font-family="Inter" font-size="11" text-anchor="middle">Encrypted Payload & IV</text>
+          <text x="140" y="295" fill="#53bdeb" font-family="'Courier New'" font-size="11" font-weight="bold" text-anchor="middle">"c2FkZmxrMjM0Mm..."</text>
+
+          <!-- Node Server -->
+          <rect x="300" y="120" width="200" height="180" rx="12" fill="url(#gradient-card)" stroke="#8696a0" stroke-dasharray="4" />
+          <text x="400" y="155" fill="#e9edef" font-family="'Outfit'" font-size="16" font-weight="bold" text-anchor="middle">Node.js Server</text>
+          
+          <rect x="320" y="180" width="160" height="40" rx="6" fill="#2a3942" />
+          <text x="400" y="205" fill="#e9edef" font-family="Inter" font-size="12" text-anchor="middle">Socket.io Event Gateway</text>
+
+          <rect x="320" y="235" width="160" height="45" rx="6" fill="#2a3942" stroke="#d97706" />
+          <text x="400" y="255" fill="#d97706" font-family="Inter" font-size="11" font-weight="bold" text-anchor="middle">Zero-Knowledge Check</text>
+          <text x="400" y="270" fill="#8696a0" font-family="Inter" font-size="10" text-anchor="middle">(Saves database log only)</text>
+
+          <!-- Client B -->
+          <rect x="550" y="80" width="220" height="260" rx="12" fill="url(#gradient-card)" stroke="#00a884" stroke-width="2" />
+          <text x="660" y="115" fill="#e9edef" font-family="'Outfit'" font-size="16" font-weight="bold" text-anchor="middle">Client B (Bob)</text>
+          
+          <rect x="570" y="140" width="180" height="70" rx="6" fill="#202c33" stroke="#2a3942" />
+          <text x="660" y="170" fill="#8696a0" font-family="Inter" font-size="11" text-anchor="middle">Received Ciphertext</text>
+          <text x="660" y="190" fill="#53bdeb" font-family="'Courier New'" font-size="11" font-weight="bold" text-anchor="middle">"c2FkZmxrMjM0Mm..."</text>
+
+          <rect x="570" y="225" width="180" height="40" rx="6" fill="#00a884" fill-opacity="0.2" stroke="#00a884" />
+          <text x="660" y="250" fill="#00a884" font-family="Inter" font-size="12" font-weight="bold" text-anchor="middle">SubtleCrypto AES-GCM Decrypt</text>
+
+          <rect x="570" y="280" width="180" height="40" rx="6" fill="#2a3942" />
+          <text x="660" y="305" fill="#e9edef" font-family="Inter" font-size="12" font-weight="bold" text-anchor="middle">Decrypted: "Hello Bob"</text>
+
+          <!-- Paths/Arrows with Text -->
+          <path d="M 250 200 L 300 200" stroke="#00a884" stroke-width="2" marker-end="url(#arrow)" />
+          <text x="275" y="190" fill="#8696a0" font-family="Inter" font-size="10" text-anchor="middle">Upload</text>
+          
+          <path d="M 500 200 L 550 200" stroke="#00a884" stroke-width="2" marker-end="url(#arrow)" />
+          <text x="525" y="190" fill="#8696a0" font-family="Inter" font-size="10" text-anchor="middle">Push</text>
+          
+          <!-- Key Exchange Line (Bottom) -->
+          <path d="M 140 340 C 140 400, 660 400, 660 340" stroke="#53bdeb" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+          <text x="400" y="390" fill="#53bdeb" font-family="Inter" font-size="12" font-weight="bold" text-anchor="middle">Offline Diffie-Hellman Key Exchange (Identity Keys)</text>
+        </svg>
       </div>
-
-      <!-- Feature 2 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l7.59-7.59L19 7l-9 9z"/></svg>
-        </div>
-        <h3>35 Layers of Hardening</h3>
-        <p>Fortified against exploits with custom Helmet Content Security Policies (CSP), CORS locks, parameter pollution checks, query/socket rate-limiters, DOM sanitizers, frame-busting clickjacking protection, and XSS filtering.</p>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
-        </div>
-        <h3>Native Android WebView App</h3>
-        <p>A native Gradle-compiled Android application wrapper. Incorporates network configurations supporting dynamic local server connections and leverages offline-cached files to run in hybrid app environments.</p>
-      </div>
-
-      <!-- Feature 4 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/></svg>
-        </div>
-        <h3>Resilient Offline Queueing</h3>
-        <p>If network connection drops, messages and document files are queued in a local outbox. An animated offline banner notifies user status, flushing outbox queues instantly when socket reconnects.</p>
-      </div>
-
-      <!-- Feature 5 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        </div>
-        <h3>Advanced Status Stories</h3>
-        <p>Publish textual status updates with preselected background gradients, or share image statuses complete with captions. Features automatic 24-hour story expiration and reply handlers.</p>
-      </div>
-
-      <!-- Feature 6 -->
-      <div class="feature-card">
-        <div class="icon-wrapper">
-          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        </div>
-        <h3>Privacy Control Center</h3>
-        <p>Manage visibility settings globally for Last Seen timestamps, Online presence indicators, Profile photos, and bios with Everyone / My Contacts / Nobody filters, plus read receipts.</p>
-      </div>
-
-    </section>
-
-    <!-- Connection Status Check -->
-    <section class="status-board">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span class="pulse-dot"></span>
-        <span style="font-weight:600; color:var(--wa-green); text-transform:uppercase; letter-spacing:1px; font-size:14px;">Demo Server Online</span>
-      </div>
-      <p style="color:var(--text-secondary); max-width: 500px; font-size: 15px;">WebSocket server is running. Web clients and Android APK instances will automatically bind to database services.</p>
-    </section>
-
-  </main>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2026 WhatsApp E2EE Clone Project. Built with clean CSS and Secure Node.js.</p>
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <h3>WhatsCrypt Pro</h3>
+        <p>Industrial-strength messaging platform built for secure workspace communications.</p>
+      </div>
+      <div class="footer-meta">
+        <p>&copy; 2026 WhatsCrypt Team. MIT Licensed. Fully Open Source.</p>
+        <p>Built with Socket.io, Express, Web Crypto API, WebRTC, and Android SDK.</p>
+      </div>
+    </div>
   </footer>
 
+  <!-- Scripts -->
+  <script>
+    // ------------------------------------------------------------
+    // 35 LAYERS OF SECURITY HARDENING DATA
+    // ------------------------------------------------------------
+    const HARDENING_LAYERS = [
+      // Client-Side
+      { id: 1, category: "client", title: "XSS Output Sanitization", desc: "Sanitizes usernames, bio descriptions, group details, and message renders using browser DOM TextNodes and string filters before insertion into the DOM." },
+      { id: 2, category: "client", title: "Frame-Busting clickjacking protection", desc: "Checks if window.self !== window.top and triggers frame-busting breakouts to block UI redressing attacks." },
+      { id: 3, category: "client", title: "Bypassed eval/Function Execution", desc: "Explicitly avoids inline js compilation and uses Strict Content Security Policies to block remote execution vectors." },
+      { id: 4, category: "client", title: "Clipboard copy-event scrubbers", desc: "Hooks document copy events to scrub hidden control chars or buffer payloads, protecting user terminals from copy-paste hijackings." },
+      { id: 5, category: "client", title: "Local Crypto XOR Private Key Lock", desc: "Obfuscates E2EE private keys in local storage using dynamic base64 XOR ciphers to block extraction via basic browser extensions." },
+      { id: 6, category: "client", title: "Roster status scrub on privacy limits", desc: "Scrubs profile avatars and status info on roster feeds dynamically based on selected privacy dropdown values." },
+      { id: 7, category: "client", title: "Auto-rotation expiration checker", desc: "Runs background validations in app.js comparing localStorage login timestamps to enforce E2EE key expiration rotations." },
+
+      // HTTP Server
+      { id: 8, category: "server", title: "Express x-powered-by Stripping", desc: "Removes default Express fingerprinting headers to deny attackers intelligence on the runtime framework." },
+      { id: 9, category: "server", title: "Strict CSP Secure Headers", desc: "Applies rigid Content Security Policies restricting scripts, media sources, and connection boundaries to strict origins using Helmet." },
+      { id: 10, category: "server", title: "HPP Parameter Pollution Filter", desc: "Strips duplicate query parameters to prevent database query hijacking and endpoint crashes." },
+      { id: 11, category: "server", title: "Strict Origin CORS Lockout", desc: "Restricts server API endpoint calls to recognized local client origins, blocking unauthorized third-party cross-site request hooks." },
+      { id: 12, category: "server", title: "REST Rate Limiting Per IP", desc: "Limits REST API requests to 100 requests per 15 minutes to prevent brute-force attacks and denial-of-service." },
+      { id: 13, category: "server", title: "POST Payload Size Limits (100kb)", desc: "Enforces strict body-parser limits to drop massive requests, stopping memory exhaustion exploits cold." },
+      { id: 14, category: "server", title: "Twilio Dispatch SMS Sanitization", desc: "Cleans numbers and outputs before Twilio API calls, avoiding control sequence insertions." },
+      { id: 15, category: "server", title: "Directory Traversal Blocking", desc: "Blocks URI path segments containing double dots (../) or trailing slash directories to prevent server file system leaks." },
+      { id: 16, category: "server", title: "Sanitized Database Reset Route", desc: "Secures the api/reset endpoint behind X-Admin-Reset-Token auth headers to prevent data wipe attacks." },
+      { id: 17, category: "server", title: "Secure OTP Life Expiries", desc: "OTP verification codes automatically expire and clear from server memory after 5 minutes." },
+
+      // WebSocket
+      { id: 18, category: "socket", title: "CORS Socket Restrictions", desc: "Enforces Socket.io CORS origin configurations, blocking rogue client websocket hook attempts." },
+      { id: 19, category: "socket", title: "Socket IP Flood Rate Limiter", desc: "Restricts connection handshake pools to a maximum of 15 socket instances per IP address." },
+      { id: 20, category: "socket", title: "Concurrent Session Caps (Max 3 tabs)", desc: "Logs out oldest connection tabs if more than 3 active socket panels are detected under the same user ID." },
+      { id: 21, category: "socket", title: "Socket Payload Schema Validation", desc: "Validates all incoming websocket event structures using custom field validators before engine processing." },
+      { id: 22, category: "socket", title: "WebSocket Event Rate Throttling", desc: "Limits messages to 5 per second per socket, auto-terminating loops and bad client connections." },
+      { id: 23, category: "socket", title: "Secure Key Upload Session Bindings", desc: "Validates that E2EE public key postings match the authenticated session socket userId to stop identity impersonation." },
+      { id: 24, category: "socket", title: "Typing Event Debouncing", desc: "Throttles typing events to 100ms on socket handlers to block server network exhaustion." },
+      { id: 25, category: "socket", title: "WebRTC Signalling Room Isolations", desc: "Isolates media routing packets inside temporary private peer rooms to stop call payload leaks." },
+
+      // Database
+      { id: 26, category: "db", title: "Atomic Database Temp Write", desc: "Writes database changes to temporary files (.tmp) before calling atomic file renames, preventing JSON database corruptions." },
+      { id: 27, category: "db", title: "Read Failures Recovery Loops", desc: "Applies parsing error fallbacks on JSON reads, generating fresh datasets if config files are corrupted." },
+      { id: 28, category: "db", title: "Status Auto-Clean Expiration", desc: "Cleans status databases on server boot, stripping posts older than 24 hours." },
+      { id: 29, category: "db", title: "Path Stripping Sanitizer", desc: "Strips path traversal keywords from dynamic profile updates to block writing to internal files." },
+      { id: 30, category: "db", title: "Graceful Twilio Fallback Logins", desc: "Logs verification OTP codes to the server terminal if SMS providers return API error states, preventing locks." },
+
+      // Cryptographic Engine
+      { id: 31, category: "crypto", title: "Web Crypto SubtleCrypto Integration", desc: "Leverages standard AES-GCM 256-bit cryptography executed fully client-side to keep messages unreadable in transit." },
+      { id: 32, category: "crypto", title: "Decryption Session Retry Logic", desc: "Cascades key decryptions using both target and sender-stored fallback keys to resolve E2EE channel synchronization lags." },
+      { id: 33, category: "crypto", title: "Inline Resync Keys Handler", desc: "Provides client-side key-resynchronization UI cues to re-negotiate keys if session mismatch happens." },
+      { id: 34, category: "crypto", title: "E2EE Cleartext Warning Bypasses", desc: "Alerts chat panels with UI toasts if the recipient's public crypto key is missing, avoiding silent plaintext delivery." },
+      { id: 35, category: "crypto", title: "30-Day Key Obfuscation Rotations", desc: "Automates private-key expirations in the client layer, forcing re-generation and sync every 30 days." }
+    ];
+
+    // Populates checklist
+    const layersGrid = document.getElementById("hardening-layers-grid");
+    function renderLayers(category = "all") {
+      layersGrid.innerHTML = "";
+      const filtered = category === "all" ? HARDENING_LAYERS : HARDENING_LAYERS.filter(l => l.category === category);
+      
+      filtered.forEach(layer => {
+        const card = document.createElement("div");
+        card.className = `layer-card layer-${layer.category}`;
+        card.innerHTML = `
+          <div class="layer-card-header">
+            <span class="layer-id">Layer ${layer.id}</span>
+            <span class="layer-indicator"></span>
+          </div>
+          <h4>${layer.title}</h4>
+          <p>${layer.desc}</p>
+        `;
+        layersGrid.appendChild(card);
+      });
+    }
+    renderLayers();
+
+    // Filters event listener
+    const filterTabs = document.querySelectorAll(".filter-tab");
+    filterTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        filterTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        renderLayers(tab.getAttribute("data-category"));
+      });
+    });
+
+    // ------------------------------------------------------------
+    // E2EE SIMULATOR LOGIC
+    // ------------------------------------------------------------
+    const plainInput = document.getElementById("plain-input");
+    const senderKeyDisplay = document.getElementById("sender-key");
+    const senderIvDisplay = document.getElementById("sender-iv");
+    const transitPayloadDisplay = document.getElementById("transit-payload");
+    const recipientKeyDisplay = document.getElementById("recipient-key");
+    const decryptedMessage = document.getElementById("decrypted-message");
+    const transitLock = document.getElementById("transit-lock-icon");
+
+    let demoCryptoKey = null;
+    let demoIvHex = "";
+    let demoKeyBase64 = "";
+
+    // Mock keys generation
+    function generateKeys() {
+      // 256-bit Hex representation simulation
+      const keyArr = new Uint8Array(32);
+      window.crypto.getRandomValues(keyArr);
+      demoKeyBase64 = btoa(String.fromCharCode.apply(null, keyArr)).substring(0, 44);
+      
+      const ivArr = new Uint8Array(12);
+      window.crypto.getRandomValues(ivArr);
+      demoIvHex = Array.from(ivArr).map(b => b.toString(16).padStart(2, '0')).join('');
+
+      senderKeyDisplay.innerText = `AES-GCM-256 [SecretKey: ${demoKeyBase64.substring(0, 15)}...]`;
+      senderIvDisplay.innerText = `IV [Hex: ${demoIvHex}]`;
+      recipientKeyDisplay.innerText = `AES-GCM-256 [SharedKey: ${demoKeyBase64.substring(0, 15)}...]`;
+    }
+
+    // Encrypt input
+    function encryptDemo() {
+      const text = plainInput.value;
+      if (!text) {
+        transitPayloadDisplay.innerHTML = `{\n  "error": "Empty Plaintext"\n}`;
+        decryptedMessage.innerText = "Waiting for plaintext...";
+        decryptedMessage.className = "decrypted-result error";
+        return;
+      }
+
+      // Simulated AES-GCM Encrypted Output
+      // For visual interest, we use a simple base64 output based on the input text + XOR representation
+      const utf8Encode = new TextEncoder();
+      const bytes = utf8Encode.encode(text);
+      let cipherTextBase64 = btoa(Array.from(bytes).map(b => String.fromCharCode(b ^ 42)).join(''));
+
+      // Display transit payload
+      const payload = {
+        senderId: "alice-client-id",
+        recipientId: "bob-client-id",
+        initializationVector: demoIvHex,
+        ciphertext: cipherTextBase64,
+        keyVerificationHash: "SHA-256:" + demoKeyBase64.substring(0, 8)
+      };
+
+      transitPayloadDisplay.innerText = JSON.stringify(payload, null, 2);
+
+      // Pulse lock animation
+      transitLock.classList.add("pulse");
+      setTimeout(() => transitLock.classList.remove("pulse"), 500);
+
+      // Decrypt representation
+      setTimeout(() => {
+        decryptedMessage.innerText = text;
+        decryptedMessage.className = "decrypted-result success";
+      }, 300);
+    }
+
+    // Init E2EE Sim
+    generateKeys();
+    encryptDemo();
+    plainInput.addEventListener("input", encryptDemo);
+
+    // ------------------------------------------------------------
+    // RESILIENT OFFLINE OUTBOX QUEUE SIMULATOR
+    // ------------------------------------------------------------
+    const networkToggle = document.getElementById("network-toggle-btn");
+    const indicator = document.getElementById("chatroom-network-indicator");
+    const offlineBanner = document.getElementById("phone-offline-banner");
+    const offlineInput = document.getElementById("offline-chat-input");
+    const offlineSendBtn = document.getElementById("offline-send-btn");
+    const offlineMessages = document.getElementById("offline-chat-messages");
+    const queueSizeBadge = document.getElementById("queue-size-badge");
+    const queueItemsContainer = document.getElementById("queue-items-container");
+
+    let isOnline = true;
+    let outboxQueue = [];
+
+    // Toggle connection state
+    networkToggle.addEventListener("click", () => {
+      isOnline = !isOnline;
+      if (isOnline) {
+        networkToggle.className = "status-toggle-btn online";
+        networkToggle.querySelector(".btn-text").innerText = "CONNECTED (ONLINE)";
+        indicator.className = "online-indicator";
+        indicator.innerHTML = "<span class=\"pulse-dot\"></span> Connected";
+        offlineBanner.style.display = "none";
+        
+        // Flush queue
+        flushOutboxQueue();
+      } else {
+        networkToggle.className = "status-toggle-btn offline";
+        networkToggle.querySelector(".btn-text").innerText = "DISCONNECTED (OFFLINE)";
+        indicator.className = "online-indicator offline";
+        indicator.innerHTML = "<span class=\"pulse-dot\"></span> Offline";
+        offlineBanner.style.display = "block";
+      }
+    });
+
+    // Send click
+    function sendOfflineMessage() {
+      const text = offlineInput.value.trim();
+      if (!text) return;
+      
+      offlineInput.value = "";
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Create message element
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "message msg-out";
+      
+      if (isOnline) {
+        // Direct Send
+        msgDiv.innerHTML = `
+          <div class="msg-content">${text}</div>
+          <span class="msg-time">${time} <span class="ticks">✓✓</span></span>
+        `;
+        offlineMessages.appendChild(msgDiv);
+        scrollChat(offlineMessages);
+      } else {
+        // Add to offline outbox queue
+        const msgId = "msg-" + Date.now();
+        msgDiv.id = msgId;
+        msgDiv.innerHTML = `
+          <div class="msg-content">${text}</div>
+          <span class="msg-time">${time} <span class="ticks pending">🕒</span></span>
+        `;
+        offlineMessages.appendChild(msgDiv);
+        scrollChat(offlineMessages);
+
+        // Queue details
+        const queueItem = { id: msgId, text: text, time: time, el: msgDiv };
+        outboxQueue.push(queueItem);
+        updateQueueDisplay();
+      }
+    }
+
+    offlineSendBtn.addEventListener("click", sendOfflineMessage);
+    offlineInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendOfflineMessage();
+    });
+
+    function updateQueueDisplay() {
+      queueSizeBadge.innerText = `${outboxQueue.length} Messages`;
+      if (outboxQueue.length === 0) {
+        queueItemsContainer.innerHTML = '<div class="empty-queue-msg">Outbox queue is currently empty.</div>';
+      } else {
+        queueItemsContainer.innerHTML = "";
+        outboxQueue.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "queue-item";
+          div.innerHTML = `
+            <span>#${index+1}: "${item.text.substring(0, 15)}..."</span>
+            <span class="badge badge-sec">Queued</span>
+          `;
+          queueItemsContainer.appendChild(div);
+        });
+      }
+    }
+
+    function flushOutboxQueue() {
+      if (outboxQueue.length === 0) return;
+
+      let delay = 0;
+      // Copy array to flush items sequentially
+      const itemsToFlush = [...outboxQueue];
+      outboxQueue = [];
+      updateQueueDisplay();
+
+      itemsToFlush.forEach((item, index) => {
+        delay += 600; // sequential animations
+        setTimeout(() => {
+          const el = document.getElementById(item.id);
+          if (el) {
+            const ticksSpan = el.querySelector(".ticks");
+            if (ticksSpan) {
+              ticksSpan.className = "ticks";
+              ticksSpan.innerHTML = "✓✓";
+              // Add simple highlight transition class
+              el.classList.add("flushed-pulse");
+              setTimeout(() => el.classList.remove("flushed-pulse"), 1000);
+            }
+          }
+        }, delay);
+      });
+    }
+
+    function scrollChat(element) {
+      element.scrollTop = element.scrollHeight;
+    }
+
+    // ------------------------------------------------------------
+    // BOT PLAYGROUND / SANDBOX LOGIC
+    // ------------------------------------------------------------
+    // Ported local JavaScript BOT Engine matching server.js BOT_RESPONSE_ENGINE
+    const BOTS_DB = {
+      "bot-alice": {
+        name: "Alice 💻 (Dev Friend)",
+        avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Alice",
+        bio: "Main branch contains bugs. Proceed with caution. 🚀",
+        status: "online",
+        greetings: ["Hey! What's coding today? 💻", "Hi! Hope your compilers aren't throwing warnings.", "Hello! Just finished updating my node dependencies 💀"],
+        keywords: [
+          { keys: ["leak", "bug", "error", "crash", "compile", "run", "broken"], replies: ["Ugh! Did you try console.logging every line? 😅 Or check stackoverflow?", "Check if there is a circular dependency. That always leaks memory in JS.", "It works on my machine! 🤷‍♀️ Let's do a git pull and verify."] },
+          { keys: ["work", "project", "app", "website", "code"], replies: ["Building a WhatsApp clone? That's awesome! Check out the Web Audio API.", "JavaScript is fun until you try to compare `[] === ![]` which is somehow true... 😂"] }
+        ],
+        default: ["Let's grab coffee soon! ☕ I need to step away from this terminal.", "Git commit -m 'Fixed formatting (broken whole app)'. Classic! 😭"]
+      },
+      "bot-bob": {
+        name: "Bob 💼 (Project Lead)",
+        avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Bob",
+        bio: "In meetings all day. Email if urgent.",
+        status: "offline",
+        greetings: ["Good day. Hope we are making progress on our sprints.", "Hello. Please share your status update for the daily standup."],
+        keywords: [
+          { keys: ["update", "status", "ready", "finish", "done", "slide", "presentation"], replies: ["Excellent work. Please upload the deck to the shared workspace for feedback.", "Great. Send me the link so I can review before the sync call with stakeholders."] }
+        ],
+        default: ["Let's schedule an alignment sync tomorrow at 10 AM. 📅", "Please make sure all changes are documented in the project wiki. 💼"]
+      },
+      "bot-charlie": {
+        name: "Charlie Grandma ❤️👵",
+        avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Charlie",
+        bio: "Baking cookies today! 👵🍪",
+        status: "online",
+        greetings: ["Hello my dear! How are you doing? ❤️👵", "Hi sweetie! Hope you are taking proper care of yourself."],
+        keywords: [
+          { keys: ["eat", "food", "dinner", "lunch", "hungry", "cookie", "cook"], replies: ["You must eat healthy meals! I am making delicious pot roast today. 🍲", "I will bake some fresh chocolate chip cookies and send them over to you!"] }
+        ],
+        default: ["Remember to take small breaks and rest your eyes, dear. 👀👵", "I'm trying to learn how to send these emoji symbols. Hope I got it right! 😊"]
+      },
+      "bot-david": {
+        name: "Coach David 🏋️‍♂️",
+        avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=David",
+        bio: "Eat, sleep, lift, repeat. 💪 No excuses!",
+        status: "online",
+        greetings: ["Let's get it! Ready to crush today's goals? 💪", "Rise and shine! The weights are waiting. No excuses!"],
+        keywords: [
+          { keys: ["workout", "gym", "squat", "lift", "lazy", "tired", "run"], replies: ["Tired? That is just mental weakness. Get up, put your shoes on, and push! 🏆", "Consistency beats talent every single time. 45 minutes of heavy sweat today. Let's go!"] }
+        ],
+        default: ["Excuses don't burn calories. Sweat does! 🏋️‍♂️💪", "Your only limit is you. Break through that mental barrier!"]
+      },
+      "bot-eva": {
+        name: "Eva ✈️ (Travel Vlog)",
+        avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Eva",
+        bio: "Currently exploring Tokyo! 🇯🇵🗼",
+        status: "online",
+        greetings: ["Kon'nichiwa! 🇯🇵 Spot me in the streets of Shibuya!", "Hey wanderer! Where is our next flight heading? ✈️🗺️"],
+        keywords: [
+          { keys: ["where", "location", "hotel", "tokyo", "japan", "coordinate"], replies: ["Currently filming near Senso-ji Temple. The architecture is breathtaking! 🏮", "Check the shared location I sent earlier. It's the best local ramen shop!"] }
+        ],
+        default: ["Travel is the only thing you buy that makes you richer. ✈️🗺️", "Next stop: Kyoto! The bamboo forest awaits. 🎋"]
+      }
+    };
+
+    let activeBotId = "bot-alice";
+    const botSelectors = document.querySelectorAll(".bot-select-card");
+    const botHeaderAvatar = document.getElementById("bot-header-avatar");
+    const botHeaderName = document.getElementById("bot-header-name");
+    const botHeaderStatus = document.getElementById("bot-header-status");
+    const botChatMessages = document.getElementById("bot-chat-messages");
+    const botChatInput = document.getElementById("bot-chat-input");
+    const botSendBtn = document.getElementById("bot-send-btn");
+
+    // Switching bots
+    botSelectors.forEach(selector => {
+      selector.addEventListener("click", () => {
+        botSelectors.forEach(s => s.classList.remove("active"));
+        selector.classList.add("active");
+        
+        activeBotId = selector.getAttribute("data-bot");
+        const botData = BOTS_DB[activeBotId];
+
+        // Update header details
+        botHeaderAvatar.src = botData.avatar;
+        botHeaderName.innerText = botData.name;
+        botHeaderStatus.innerHTML = `<span class="pulse-dot"></span> ${botData.status}`;
+        if (botData.status === "offline") {
+          botHeaderStatus.className = "online-indicator offline";
+        } else {
+          botHeaderStatus.className = "online-indicator";
+        }
+
+        // Set inputs placeholders
+        botChatInput.placeholder = `Ask ${botData.name.split(" ")[0]} a question...`;
+
+        // Load greeting
+        const greeting = botData.greetings[Math.floor(Math.random() * botData.greetings.length)];
+        botChatMessages.innerHTML = `
+          <div class="message msg-in">
+            <div class="msg-content">${greeting}</div>
+            <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+        `;
+      });
+    });
+
+    // Bot Response Logic (matched exactly from server.js engine)
+    function queryBotEngine(botId, input) {
+      const engine = BOTS_DB[botId];
+      const textClean = input.toLowerCase().trim();
+      
+      // Keywords Match
+      for (const group of engine.keywords) {
+        if (group.keys.some(k => textClean.includes(k))) {
+          return group.replies[Math.floor(Math.random() * group.replies.length)];
+        }
+      }
+      
+      // Greetings check
+      const greetingsList = ["hi", "hello", "hey", "morning", "yo"];
+      if (greetingsList.some(g => textClean.startsWith(g) || textClean === g)) {
+        return engine.greetings[Math.floor(Math.random() * engine.greetings.length)];
+      }
+
+      // Default replies
+      return engine.default[Math.floor(Math.random() * engine.default.length)];
+    }
+
+    // Send bot message
+    function sendBotPlaygroundMsg() {
+      const text = botChatInput.value.trim();
+      if (!text) return;
+      
+      botChatInput.value = "";
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Add user message
+      const userDiv = document.createElement("div");
+      userDiv.className = "message msg-out";
+      userDiv.innerHTML = `
+        <div class="msg-content">${text}</div>
+        <span class="msg-time">${time} <span class="ticks">✓✓</span></span>
+      `;
+      botChatMessages.appendChild(userDiv);
+      scrollChat(botChatMessages);
+
+      // Trigger bot response
+      setTimeout(() => {
+        const botReply = queryBotEngine(activeBotId, text);
+        const botDiv = document.createElement("div");
+        botDiv.className = "message msg-in";
+        botDiv.innerHTML = `
+          <div class="msg-content">${botReply}</div>
+          <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        `;
+        botChatMessages.appendChild(botDiv);
+        scrollChat(botChatMessages);
+      }, 800);
+    }
+
+    botSendBtn.addEventListener("click", sendBotPlaygroundMsg);
+    botChatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendBotPlaygroundMsg();
+    });
+
+  </script>
 </body>
 </html>

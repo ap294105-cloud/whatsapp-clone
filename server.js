@@ -107,6 +107,10 @@ function reportExpressSetup() {
   });
   serverApp.use("/api/", apiLimiter);
 
+  serverApp.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "demo.html"));
+  });
+
   // Layer 20: Prevent directory listing / traversal
   serverApp.use((req, res, next) => {
     if (req.path.endsWith("/") && req.path !== "/") {

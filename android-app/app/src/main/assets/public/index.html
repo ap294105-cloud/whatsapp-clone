@@ -241,6 +241,15 @@
           </div>
 
           <div class="settings-section">
+            <h3>Connection Settings</h3>
+            <div style="padding: 5px 0;">
+              <label for="settings-server-url-input" style="font-size: 11px; font-weight:600; color: var(--wa-green); text-transform: uppercase; margin-bottom: 6px; display: block;">Server Connection URL</label>
+              <input type="text" id="settings-server-url-input" placeholder="e.g. https://your-backend.onrender.com" style="width:100%; background:var(--bg-sidebar-search-input); border:1px solid var(--border-sidebar); border-radius:6px; padding:8px 12px; color:var(--text-primary); font-size:14px; outline:none; box-sizing: border-box;">
+              <p style="font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.4;">Override server socket address (e.g. when hosting the web client on Vercel).</p>
+            </div>
+          </div>
+
+          <div class="settings-section">
             <h3>Account Settings</h3>
             <button class="danger-btn" id="logout-btn" style="background-color: #ff5e57; margin-bottom: 12px; font-weight:600;">Log Out Session</button>
             <button class="danger-btn" id="reset-app-btn" style="background-color: transparent; border: 1px solid rgba(255, 94, 87, 0.4); color: #ff5e57; font-weight:600;">Reset All Chat Data</button>
